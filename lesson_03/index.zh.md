@@ -36,7 +36,7 @@
 | AVX2 | 94.44% |
 | AVX512 (Steam 不区分 AVX512 和 AVX512ICL) | 14.09% |
 
-对于像 FFmpeg 这样拥有数十亿用户的应用程序来说，即使是 0.1% 也是非常大的用户数量，如果出现问题会有大量的错误报告。FFmpeg 拥有广泛的测试基础设施，用于在我们的 [FATE 测试套件](https://fate.ffmpeg.org/?query=subarch:x86_64%2F%2F) 中测试 CPU/操作系统/编译器的各种变体。每一次提交都在数百台机器上运行，以确没有任何东西被破坏。
+对于像 FFmpeg 这样拥有数十亿用户的应用程序来说，即使是 0.1% 也是非常大的用户数量，如果出现问题会有大量的错误报告。FFmpeg 拥有广泛的测试基础设施，用于在我们的 [FATE 测试套件](https://fate.ffmpeg.org/?query=subarch:x86_64%2F%2F) 中测试 CPU/操作系统/编译器的各种变体。每一次提交都在数百台机器上运行，以确保没有任何东西被破坏。
 
 Intel 在这里提供了详细的指令集手册：[https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html)
 
@@ -104,7 +104,7 @@ mmsize 被加到负的 widthq 上，使其更接近零。循环条件现在是 j
 
 在所有的例子中，我们一直使用 movu 来避开对齐的话题。许多 CPU 如果数据是对齐的，即如果内存地址可以被 SIMD 寄存器大小整除，则可以更快地加载和存储数据。在可能的情况下，我们尝试在 FFmpeg 中使用 mova 进行对齐的加载和存储。
 
-在 FFmpeg 中，av_malloc 能够在堆上提供对齐的内存，而 DECLARE_ALIGNED C 预处理器指令可以在栈上提供对齐的内存。如果 mova 用于未对齐的地址，它将导致段错误 (segmentation fault) 并且应用程序将崩溃。确对齐值对应于 SIMD 寄存器大小也很重要，即 xmm 为 16，ymm 为 32，zmm 为 64。
+在 FFmpeg 中，av_malloc 能够在堆上提供对齐的内存，而 DECLARE_ALIGNED C 预处理器指令可以在栈上提供对齐的内存。如果 mova 用于未对齐的地址，它将导致段错误 (segmentation fault) 并且应用程序将崩溃。确保对齐值对应于 SIMD 寄存器大小也很重要，即 xmm 为 16，ymm 为 32，zmm 为 64。
 
 以下是如何将 RODATA 段的开头对齐到 64 字节：
 
